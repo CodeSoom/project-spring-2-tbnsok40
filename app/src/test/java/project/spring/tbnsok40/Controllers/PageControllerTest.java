@@ -12,10 +12,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import project.spring.tbnsok40.application.PageService;
 import project.spring.tbnsok40.domain.Page;
+import project.spring.tbnsok40.dto.PageData;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,15 +40,16 @@ class PageControllerTest {
         Page page = Page.builder()
                 .id(1L)
                 .expected_salary(2000)
-                .introduce("hi myname is")
+                .introduce("I'm Backend developer")
                 .career_year(2)
-                .career("haha")
+                .career("Codesoom")
                 .star(3)
                 .build();
 
         given(pageService.getAllPage()).willReturn(List.of(page));
         given(pageService.getPage(1L)).willReturn(page);
-//        given(pageService.getPage(1000L)).willThrow(new NotFoundException("Page Not Found"));
+        given(pageService.createPage(any(PageData.class)))
+                .willReturn(page);
     }
 
     @Nested
@@ -59,7 +64,7 @@ class PageControllerTest {
                             .accept(MediaType.APPLICATION_JSON_UTF8)
             )
                     .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("hi")));
+                    .andExpect(content().string(containsString("Backend")));
         }
     }
 
@@ -98,6 +103,34 @@ class PageControllerTest {
                 mockMvc.perform(
                         get("/page/1000")
                 ).andExpect(status().isNotFound());
+            }
+        }
+    }
+
+
+
+    @Nested
+    @DisplayName("CreatePage 메소드는")
+    class Describe_create {
+
+        @Nested
+        @DisplayName("유효한 데이터를 입력받으면,  ")
+        class Context_createPage {
+
+            @Test
+            @DisplayName("새로운 Page 를 생성한다.  ")
+            void create() throws Exception {
+                mockMvc.perform(
+                        post("/page")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"expected_salary\": 1000," +
+                                        "\"introduce\" : \"hi myname is\"," +
+                                        "\"career_year\" : 2," +
+                                        "\"career\": \"nana\"," +
+                                        "\"star\": 3" +
+                                        "}")
+                ).andExpect(status().isCreated());
             }
         }
     }
