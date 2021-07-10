@@ -44,6 +44,7 @@ class PageControllerTest {
 
         given(pageService.getAllPage()).willReturn(List.of(page));
         given(pageService.getPage(1L)).willReturn(page);
+//        given(pageService.getPage(1000L)).willThrow(new NotFoundException("Page Not Found"));
     }
 
     @Nested
@@ -64,17 +65,40 @@ class PageControllerTest {
 
     @Nested
     @DisplayName("GetOnePage 메소드는, ")
-    class Describe_getOnePage{
+    class Describe_getOnePage {
 
-        @Test
-        @DisplayName("원하는 특정 페이지를 리턴한다.")
-        void getOnePage() throws Exception{
-            mockMvc.perform(
-                    get("/page/1")
-                            .accept(MediaType.APPLICATION_JSON_UTF8)
-            )
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("1")));
+        @Nested
+        @DisplayName("찾으려는 특정 페이지가 존재할 때, ")
+        class Context_getExistedPage {
+
+            @Test
+            @DisplayName("해당 페이지를 리턴한다.")
+            void getOnePage() throws Exception {
+                mockMvc.perform(
+                        get("/page/1")
+                                .accept(MediaType.APPLICATION_JSON)
+                )
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("1")));
+            }
+        }
+
+        @Nested
+        @DisplayName("찾으려는 페이지가 존재하지 않으면, ")
+        class Context_getNotExistedPage {
+
+            @BeforeEach
+            void setUp() throws NotFoundException {
+                given(pageService.getPage(1000L)).willThrow(new NotFoundException("Page Not Found"));
+            }
+
+            @Test
+            @DisplayName("예외를 던진다.")
+            void getOnePage() throws Exception {
+                mockMvc.perform(
+                        get("/page/1000")
+                ).andExpect(status().isNotFound());
+            }
         }
     }
 }
