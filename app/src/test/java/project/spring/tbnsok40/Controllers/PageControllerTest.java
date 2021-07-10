@@ -67,7 +67,7 @@ class PageControllerTest {
     class Describe_getOnePage{
 
         @Test
-        @DisplayName("원하는 특젱 페이지를 리턴한다.")
+        @DisplayName("원하는 특정 페이지를 리턴한다.")
         void getOnePage() throws Exception{
             mockMvc.perform(
                     get("/page/1")
