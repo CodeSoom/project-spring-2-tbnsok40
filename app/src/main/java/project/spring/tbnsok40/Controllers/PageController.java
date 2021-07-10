@@ -1,11 +1,14 @@
 package project.spring.tbnsok40.Controllers;
 
 import javassist.NotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.config.Task;
 import org.springframework.web.bind.annotation.*;
 import project.spring.tbnsok40.application.PageService;
 import project.spring.tbnsok40.domain.Page;
+import project.spring.tbnsok40.dto.PageData;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,8 +31,9 @@ public class PageController {
         return pageService.getPage(id);
     }
 
-//    @PostMapping
-//    public Task CreatePage(){
-//        return pageService.
-//    }
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Page CreatePage(@RequestBody @Valid PageData pageData){
+        return pageService.createPage(pageData);
+    }
 }

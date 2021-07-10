@@ -1,9 +1,11 @@
 package project.spring.tbnsok40.application;
 
+import com.github.dozermapper.core.Mapper;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 import project.spring.tbnsok40.domain.Page;
 import project.spring.tbnsok40.domain.PageRepository;
+import project.spring.tbnsok40.dto.PageData;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -13,8 +15,13 @@ import java.util.List;
 public class PageService {
 
     private final PageRepository pageRepository;
+    private final Mapper mapper;
 
-    public PageService(PageRepository pageRepository) {
+    public PageService(
+            PageRepository pageRepository,
+            Mapper dozerMapper
+    ) {
+        this.mapper = dozerMapper;
         this.pageRepository = pageRepository;
     }
 
@@ -26,9 +33,10 @@ public class PageService {
         return findPage(id);
     }
 
-//    public Page createPage(PageData pageData){
-//        return pageRepository.save(pageData)
-//    }
+    public Page createPage(PageData pageData){
+        Page page = mapper.map(pageData, Page.class);
+        return pageRepository.save(page);
+    }
 
     private Page findPage(Long id) throws NotFoundException {
         return pageRepository.findById(id)
