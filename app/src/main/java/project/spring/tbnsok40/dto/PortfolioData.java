@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageData {
+public class PortfolioData {
 
     private Long id;
 

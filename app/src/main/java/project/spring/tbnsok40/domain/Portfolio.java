@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Page {
+public class Portfolio {
 
     @Id
     @GeneratedValue
@@ -29,7 +29,7 @@ public class Page {
 
     private Integer star;
 
-    public void changeWith(Page source) {
+    public void changeWith(Portfolio source) {
         this.expected_salary = source.expected_salary;
         this.introduce = source.introduce;
         this.career_year = source.career_year;
