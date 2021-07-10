@@ -2,10 +2,7 @@ package project.spring.tbnsok40.Controllers;
 
 import javassist.NotFoundException;
 import org.springframework.scheduling.config.Task;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.spring.tbnsok40.application.PageService;
 import project.spring.tbnsok40.domain.Page;
 
@@ -27,7 +24,7 @@ public class PageController {
     }
 
     @GetMapping("{id}")
-    public Page getOnePage(Long id) throws NotFoundException {
+    public Page getOnePage(@PathVariable Long id) throws NotFoundException {
         return pageService.getPage(id);
     }
 

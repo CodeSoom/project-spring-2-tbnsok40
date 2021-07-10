@@ -74,8 +74,7 @@ class PageControllerTest {
                             .accept(MediaType.APPLICATION_JSON_UTF8)
             )
                     .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("hi")));
-            // test 실패 => 아무 컨텐트도 들어와 있지 않음.
+                    .andExpect(content().string(containsString("1")));
         }
     }
 }
