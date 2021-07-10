@@ -42,4 +42,11 @@ public class PageService {
         return pageRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Page object not found"));
     }
+
+    public Page updatePage(Long id, PageData pageData) throws NotFoundException {
+        Page page = findPage(id);
+        page.changeWith(mapper.map(pageData, Page.class));
+
+        return page;
+    }
 }

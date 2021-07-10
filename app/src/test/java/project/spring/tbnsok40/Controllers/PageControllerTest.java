@@ -14,12 +14,15 @@ import project.spring.tbnsok40.application.PageService;
 import project.spring.tbnsok40.domain.Page;
 import project.spring.tbnsok40.dto.PageData;
 
+import javax.print.attribute.standard.Media;
+
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.in;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,6 +53,50 @@ class PageControllerTest {
         given(pageService.getPage(1L)).willReturn(page);
         given(pageService.createPage(any(PageData.class)))
                 .willReturn(page);
+
+        given(pageService.updatePage(eq(1L), any(PageData.class)))
+                .will(invocation -> {
+                    Long id = invocation.getArgument(0);
+                    PageData pageData = invocation.getArgument(1);
+                    return Page.builder()
+                            .id(id)
+                            .expected_salary(pageData.getExpected_salary())
+                            .introduce(pageData.getIntroduce())
+                            .career_year(pageData.getCareer_year())
+                            .career(pageData.getCareer())
+                            .star(pageData.getStar())
+                            .build();
+                });
+
+    }
+
+    @Nested
+    @DisplayName("updatePage 메소드는, ")
+    class Describe_update {
+
+        @Nested
+        @DisplayName("유효한 데이터를 입력받으면, ")
+        class Context_WithValidData {
+
+
+            @Test
+            @DisplayName("페이지 정보를 수정한다. ")
+            void updatePage() throws Exception {
+                mockMvc.perform(
+                        patch("/page/1")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"expected_salary\":\"200000\"," +
+                                        "\"introduce\":\"frontEnd\"," +
+                                        "\"career_year\":2," +
+                                        "\"career\":\"toss\"," +
+                                        "\"star\":5" +
+                                        "}")
+                )
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("frontEnd")));
+            }
+        }
     }
 
     @Nested
@@ -106,7 +153,6 @@ class PageControllerTest {
             }
         }
     }
-
 
 
     @Nested

@@ -29,7 +29,11 @@ public class Page {
 
     private Integer star;
 
-    @OneToOne
-    private User user;
-
+    public void changeWith(Page source) {
+        this.expected_salary = source.expected_salary;
+        this.introduce = source.introduce;
+        this.career_year = source.career_year;
+        this.career = source.career;
+        this.star = source.star;
+    }
 }

@@ -33,7 +33,14 @@ public class PageController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Page CreatePage(@RequestBody @Valid PageData pageData){
+    public Page CreatePage(@RequestBody @Valid PageData pageData) {
         return pageService.createPage(pageData);
+    }
+
+    @PatchMapping("{id}")
+    public Page updatePage(
+            @PathVariable Long id,
+            @RequestBody @Valid PageData pageData) throws NotFoundException {
+        return pageService.updatePage(id, pageData);
     }
 }
