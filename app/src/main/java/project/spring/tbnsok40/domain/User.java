@@ -28,5 +28,8 @@ public class User {
 
     private Object photo;
 
+    @OneToOne
+    private Page page;
+
 }
 
