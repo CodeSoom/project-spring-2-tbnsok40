@@ -6,21 +6,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Page {
+public class Portfolio {
 
     @Id
     @GeneratedValue
-    private Long page_id;
+    private Long id;
 
     private Integer expected_salary;
 
@@ -32,4 +29,11 @@ public class Page {
 
     private Integer star;
 
+    public void changeWith(Portfolio source) {
+        this.expected_salary = source.expected_salary;
+        this.introduce = source.introduce;
+        this.career_year = source.career_year;
+        this.career = source.career;
+        this.star = source.star;
+    }
 }
